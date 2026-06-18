@@ -1,10 +1,34 @@
 "use client";
-import {useState} from "react";
+import {useState, type FormEvent} from "react";
 import SignupModal from "@/components/SignupModal";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
 
   const [showSignup, setShowSignup] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const supabase = createClient();
+  const router = useRouter();
+
+  async function handleLogin(e: FormEvent) {
+    e.preventDefault();
+    setError(null);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) {
+      setError(error.message);
+    }
+    else {
+      router.push("/");
+      router.refresh();
+    }
+  }
 
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#F5EFE8]">
@@ -36,25 +60,35 @@ export default function LoginPage() {
               ifyousayso
             </h1>
 
-            <input 
-              className="bg-[#E8F0FE] rounded-md px-4 py-3 w-[80%] mx-auto text-black focus:outline-none focus:ring-2 focus:ring-[#122c4f]" 
-              type="text" 
-              placeholder="email" 
-            />
-            <input
-              className="bg-[#E8F0FE] rounded-md px-4 py-3 w-[80%] mx-auto text-black focus:outline-none focus:ring-2 focus:ring-[#122c4f]"
-              type="password"
-              placeholder="password"
-            />
+            <form onSubmit = {handleLogin} className = "flex flex-col gap-3">
+              <input 
+                className="bg-[#E8F0FE] rounded-md px-4 py-3 w-[80%] mx-auto text-black focus:outline-none focus:ring-2 focus:ring-[#122c4f]" 
+                type="text" 
+                placeholder="email" 
+                value = {email}
+                onChange = {(e) => setEmail(e.target.value)}
+              />
+              <input
+                className="bg-[#E8F0FE] rounded-md px-4 py-3 w-[80%] mx-auto text-black focus:outline-none focus:ring-2 focus:ring-[#122c4f]"
+                type="password"
+                placeholder="password"
+                value = {password}
+                onChange = {(e) => setPassword(e.target.value)}
+              />
 
-            {/* login button*/}
-            <button className="rounded-3xl mt-4 mb-4 bg-[#383533] opacity-100 hover:opacity-90 w-[60%] mx-auto py-3 text-white">
-              login
-            </button>
-  
+              {/* login button*/}
+              <button 
+                className="rounded-3xl mt-4 mb-4 bg-[#383533] opacity-100 hover:opacity-90 w-[60%] mx-auto py-3 text-white"
+                type = "submit">
+                login
+              </button>
+
+              {error && <p className="text-sm text-red-600 text-center font-bold -mt-4" >{error}</p>}
+            </form>
+
             <div className="flex items-center gap-3 text-xs text-white/80 justify-center">
               <span className="h-px basis-3/10 bg-white/40" />
-              or log in with
+                or log in with
               <span className="h-px basis-3/10 bg-white/40" />
             </div>
 

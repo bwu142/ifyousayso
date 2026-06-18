@@ -28,7 +28,29 @@ export async function updateSession(request: NextRequest) {
 
   // Touch the user to trigger a token refresh if needed.
   // Do not put other logic between createServerClient and this call.
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const path = request.nextUrl.pathname;
+
+  // Routes that a logged-out visitor IS allowed to see.
+  // (/auth is reserved for the Google OAuth callback we'll add later.)
+  const isPublicRoute = path.startsWith("/login") || path.startsWith("/auth");
+
+  // Not logged in and trying to reach a protected page → send to /login.
+  if (!user && !isPublicRoute) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  // Already logged in but sitting on /login → send to the home page.
+  if (user && path.startsWith("/login")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
+  }
 
   return supabaseResponse;
 }

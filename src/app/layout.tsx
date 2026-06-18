@@ -1,6 +1,29 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Alumni_Sans,
+  Alexandria,
+  Caladea,
+} from "next/font/google";
 import "./globals.css";
+
+const alumniSans = Alumni_Sans({
+  variable: "--font-alumni-sans",
+  subsets: ["latin"],
+});
+
+const alexandria = Alexandria({
+  variable: "--font-alexandria",
+  subsets: ["latin"],
+});
+
+// Caladea is not a variable font, so explicit weights are required.
+const caladea = Caladea({
+  variable: "--font-caladea",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${alumniSans.variable} ${alexandria.variable} ${caladea.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

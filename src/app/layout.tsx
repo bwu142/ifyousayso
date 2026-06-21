@@ -4,6 +4,7 @@ import {
   Geist_Mono,
   Alumni_Sans,
   Alexandria,
+  Albert_Sans,
   Caladea,
 } from "next/font/google";
 import "./globals.css";
@@ -18,6 +19,11 @@ const alexandria = Alexandria({
   subsets: ["latin"],
 });
 
+const albertSans = Albert_Sans({
+  variable: "--font-albert-sans",
+  subsets: ["latin"],
+});
+
 // Caladea is not a variable font, so explicit weights are required.
 const caladea = Caladea({
   variable: "--font-caladea",
@@ -25,15 +31,6 @@ const caladea = Caladea({
   weight: ["400", "700"],
 });
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -48,7 +45,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${alumniSans.variable} ${alexandria.variable} ${caladea.variable} h-full antialiased`}
+      className={`${alumniSans.variable} ${alexandria.variable} ${albertSans.variable} ${caladea.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

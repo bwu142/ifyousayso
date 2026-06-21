@@ -3,6 +3,7 @@ import {useState, type FormEvent} from "react";
 import SignupModal from "@/components/SignupModal";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 
 export default function LoginPage() {
 
